@@ -1,8 +1,10 @@
 import * as express from 'express-promise-router';
 const router = express(); 
-import sample from './sample';
+import facilities from './facilities';
+import users from './users';
 
-router.use('/sample', sample);
+router.use('/facilities', facilities);
+router.use('/users', users);
 
 
 export { router };

@@ -1,0 +1,72 @@
+body {
+    background-color: lightgray;
+}
+
+h3 {
+    text-align: center;
+    color: teal;
+}
+
+.mainHeader {
+    color: teal;
+    text-align: center;
+    margin-top: 5%;
+    font-size: 3em;
+    margin-bottom: 6%;
+}
+
+.clockHeader {
+    color: black;
+    text-align: center;
+    margin-top: -6%;
+}
+
+.warningSpan {
+    color: #CF8C8C;
+}
+
+.signUpLabel {
+    text-align: left;
+}
+
+.signUpLabel label {
+    color: #008c86;
+}
+
+.errorMsgsLi {
+    text-align: left;
+}
+
+.facilityCard {
+    padding-bottom: 1%;
+}
+
+.ui.header:first-child {
+    margin-top: 3%;
+}
+
+i.big.icon,
+i.big.icons {
+    line-height: .5;
+    vertical-align: middle;
+    font-size: 2em;
+}
+
+.stopwathMsg {
+    color: teal;
+    text-align: center;
+}
+
+.ui.message>:last-child {
+    margin-bottom: -125px;
+}
+
+.ui.form .field:last-child,
+.ui.form .fields:last-child .field {
+    width: 50%;
+}
+
+.ui.large.form {
+    width: 100%;
+    margin-top: 3%;
+}

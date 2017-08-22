@@ -3,7 +3,7 @@ import * as express from 'express-promise-router';
 const authRouter = express();
 
 
-authRouter.use('/', "****");
+//authRouter.use('/', "****");
 
 
 export { authRouter }
