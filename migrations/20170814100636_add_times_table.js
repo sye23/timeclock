@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
         table.increments('id').primary();
         table.integer('startTime');
         table.integer('endTime');
+        table.integer('userId');
     });
 };
 

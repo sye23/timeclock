@@ -10,7 +10,7 @@ function isOkPass(p: string) {
 
     if (p.length < 6) {
         obj.result = false;
-        obj.error = "Minimum of 6 Characters!"
+        obj.error = "Password Needs Minimum of 6 Characters!"
         return obj;
     }
 
@@ -31,17 +31,21 @@ function isOkPass(p: string) {
 
     if (numUpper < 1) {
         obj.result = false;
-        obj.error = "requires uppercase letter";
+        obj.error = "Password Requires Uppercase Letter";
         return obj;
     } else if (numLower < 1) {
         obj.result = false;
-        obj.error = "requires lowercase letter";
+        obj.error = "Password Requires Lowercase Letter";
         return obj;
     } else if (numNums < 1) {
         obj.result = false;
-        obj.error = "requires a number";
+        obj.error = "Password Requires a number";
         return obj;
-    }
+     }//else if (numSpecials < 1) {
+    //     obj.result = false;
+    //     obj.error = "Requires a Special Character";
+    //     return obj;
+    // }
 
     return obj;
 }
