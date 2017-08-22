@@ -125,7 +125,7 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
     
     submit = () => {
         this.formValidation()
-        if(this.formValidation()){
+        if(this.formValidation() && this.checkForErrors(this.state.error)){
             alert("Form submitted");
         }else{
             alert("Form has errors.")
@@ -154,7 +154,7 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
               >
                 <Grid.Column style={{ maxWidth: 450 }}>
                   
-                  <Form error={!this.checkForErrors(this.state.error)} size='large'>
+                  <Form className='signUpForm' error={!this.checkForErrors(this.state.error)} size='large'>
                     <Message
                         floating
                         size='mini'
@@ -243,6 +243,7 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
                       <Button color='teal' fluid size='large' onClick={this.submit}>Submit</Button>
                     </Segment>
                   </Form>
+                  <Link to='/adminLogin'><Button color='orange' floated='right' size='small' >Go Back</Button></Link>
                 </Grid.Column>
               </Grid>
             </div>

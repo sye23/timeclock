@@ -1,5 +1,5 @@
 body {
-    background-color: lightgray;
+    background-color: rgba(255, 151, 66, .7);
 }
 
 h3 {
@@ -8,7 +8,7 @@ h3 {
 }
 
 .mainHeader {
-    color: teal;
+    color: white;
     text-align: center;
     margin-top: 5%;
     font-size: 3em;
@@ -57,7 +57,7 @@ i.big.icons {
     text-align: center;
 }
 
-.ui.message>:last-child {
+.ui.success.message>:last-child {
     margin-bottom: -125px;
 }
 
@@ -69,4 +69,14 @@ i.big.icons {
 .ui.large.form {
     width: 100%;
     margin-top: 3%;
+}
+
+.ui[class*="right labeled"].icon.button {
+    position: fixed;
+    bottom: 15px;
+    right: 120px;
+}
+
+.signUpForm {
+    padding-bottom: 2%;
 }

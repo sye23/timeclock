@@ -4,7 +4,7 @@ import * as utils from '../../utils/utilFunctions';
 import {UserLoginState} from '../../types/userLoginState';
 import { Link } from 'react-router-dom';
 
-export default class UserLogin extends React.Component < any, UserLoginState > {
+export default class ForgotPassword extends React.Component < any, any > {
 
   constructor() {
     super();
@@ -70,7 +70,8 @@ submit = () => {
              `
           }</style>
 
-          <h1 className='mainHeader'>Time Clock</h1>
+          <h1 className='mainHeader'>Time Clock<h2>Forgot Password</h2></h1>
+          
         <Grid
           textAlign='center'
           style={{
@@ -85,7 +86,7 @@ submit = () => {
             
               <Segment stacked>
                 <Header as='h2' color='teal' textAlign='center'>
-                  {' '}Login to your account
+                  {' '}Enter Email To Reset Password
                 </Header>
               
                 <Form.Input
@@ -97,17 +98,18 @@ submit = () => {
                   value={this.state.user.email}
                   onChange={this.changeHandler}
                   onBlur={this.blurHandler}
-                  placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}/>
+                  placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}
+                />
                 <Button
                   color='teal' 
                   fluid size='large' 
                   onClick={this.submit}>
-                  Login
+                  Submit
                 </Button>
               </Segment>
             </Form>
             <Message>
-              <Link to='/adminLogin'>Admin Login</Link>
+              <Link to='/adminLogin'>Back To Admin Login</Link>
             </Message>
           </Grid.Column>
         </Grid>

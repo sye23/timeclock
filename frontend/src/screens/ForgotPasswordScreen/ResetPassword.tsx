@@ -1,10 +1,9 @@
 import * as React from 'react';
 import {Button,Form,Grid,Header,Image,Message,Segment} from 'semantic-ui-react';
 import * as utils from '../../utils/utilFunctions';
-import {UserLoginState} from '../../types/userLoginState';
 import { Link } from 'react-router-dom';
 
-export default class UserLogin extends React.Component < any, UserLoginState > {
+export default class ResetPassword extends React.Component < any, any > {
 
   constructor() {
     super();
@@ -81,8 +80,12 @@ submit = () => {
             maxWidth: 450
           }}>
           
-            <Form size='large'>
-            
+            <Form error={this.state.errors.error} size='large'>
+            <Message
+              size='mini'
+              error
+              content={this.state.errors.errorMsg}
+            />
               <Segment stacked>
                 <Header as='h2' color='teal' textAlign='center'>
                   {' '}Login to your account
@@ -91,13 +94,13 @@ submit = () => {
                 <Form.Input
                   error = {this.state.errors.error}                  
                   fluid
-                  icon='at'
+                  icon='user'
                   iconPosition='left'
                   name='email'
                   value={this.state.user.email}
                   onChange={this.changeHandler}
                   onBlur={this.blurHandler}
-                  placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}/>
+                  placeholder='E-mail address'/>
                 <Button
                   color='teal' 
                   fluid size='large' 

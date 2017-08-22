@@ -49,15 +49,22 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
         this.setState(state);
         return formIsValid;
     }
+
+    checkForErrors = (obj:{}) =>{
+        for (let i in obj) {
+            if (obj[i] === true) return false;
+        }
+        return true;
+    }
     
     
     submit = () => {
-    this.formValidation()
-    if(this.formValidation()){
-        alert("Form submitted");
-    }else{
-        alert("Form has errors.")
-    }
+        this.formValidation()
+        if(this.formValidation() && this.checkForErrors(this.state.error)){
+            alert("Form submitted");
+        }else{
+            alert("Form has errors.")
+        }
     }
 
     render(){
@@ -85,6 +92,9 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                     content={this.state.errorMsg.email}
                    />
                     <Segment stacked>
+                    <Header as='h2' color='teal' textAlign='center'>
+                        {' '}Administator Login 
+                    </Header>
                       <Form.Input
                         error = {this.state.error.email}
                         fluid
@@ -115,6 +125,7 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                     Don't have account? <Link to='/signUp'>Sign Up</Link>
                     <br/><Link to='/forgotPassword'>Forgot Password?</Link>
                   </Message>
+                  <Link to='/'><Button color='orange' floated='right' size='small' >Go Back</Button></Link>
                 </Grid.Column>
               </Grid>
             </div>
