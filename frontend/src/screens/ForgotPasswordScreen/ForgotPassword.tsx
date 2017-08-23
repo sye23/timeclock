@@ -1,14 +1,18 @@
 import * as React from 'react';
 import {Button,Form,Grid,Header,Image,Message,Segment} from 'semantic-ui-react';
 import * as utils from '../../utils/utilFunctions';
-import {UserLoginState} from '../../types/userLoginState';
+import {ForgotPasswordState} from '../../types/forgotPasswordState';
 import { Link } from 'react-router-dom';
 
-export default class UserLogin extends React.Component < any, UserLoginState > {
+
+export default class ForgotPassword extends React.Component < any, ForgotPasswordState > {
 
   constructor() {
     super();
     this.state = {
+      success:{
+        isSubmitted: false
+      },
       user:{
         email:''
       },
@@ -24,7 +28,6 @@ changeHandler = (e: any) => {
   state.user[e.target.name] = e.target.value;
   this.setState(state);
 }
-
 
 formValidation = () =>{
   let state =Object.assign({}, this.state);
@@ -45,29 +48,35 @@ formValidation = () =>{
 
 
 submit = () => {
+  
+  let state = Object.assign({}, this.state);
   this.formValidation()
   if(this.formValidation()){
-    alert("Form submitted");
- }else{
-    alert("Form has errors.")
- }
+      state.success.isSubmitted = true;
+  }else{
+      state.success.isSubmitted = false;
+  }
 }
 
   render() {
-    
-    return (
-      <div className='login-form'>
-        <style>
-          {
-            ` body > div,
-            body > div > div,
-            body > div > div > div.login-form {
-              height: 100%;
-            }
-             `
-          }</style>
+    let render;
 
-          <h1 className='mainHeader'>Time Clock</h1>
+    if(!this.state.success.isSubmitted){
+      render=
+        <div className='login-form'>
+          <style>
+            {
+              ` body > div,
+              body > div > div,
+              body > div > div > div.login-form {
+                height: 100%;
+              }
+              `
+            }
+            </style>
+
+          <h1 className='mainHeader'>Time Clock<h2>Forgot Password</h2></h1>
+          
         <Grid
           textAlign='center'
           style={{
@@ -78,11 +87,11 @@ submit = () => {
             maxWidth: 450
           }}>
           
-            <Form size='large'>
+            <Form size='large'>  
             
               <Segment stacked>
                 <Header as='h2' color='teal' textAlign='center'>
-                  {' '}Login to your account
+                  {' '}Enter Email To Reset Password
                 </Header>
               
                 <Form.Input
@@ -93,21 +102,57 @@ submit = () => {
                   name='email'
                   value={this.state.user.email}
                   onChange={this.changeHandler}
-                  placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}/>
+                  placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}
+                />
                 <Button
                   color='teal' 
                   fluid size='large' 
                   onClick={this.submit}>
-                  Login
+                  Submit
                 </Button>
               </Segment>
             </Form>
             <Message>
-              <Link to='/adminLogin'>Admin Login</Link>
+              <Link to='/adminLogin'>Back To Admin Login</Link>
             </Message>
           </Grid.Column>
         </Grid>
       </div>
+    }else{
+      render=
+      <div className='login-form'>
+        <style>
+        {
+          ` body > div,
+          body > div > div,
+          body > div > div > div.login-form {
+            height: 100%;
+          }
+          `
+        }
+        </style>
+      <h1 className='mainHeader'>Time Clock<h2>Forgot Password</h2></h1>  
+        <Grid
+          textAlign='center'
+          style={{
+          height: '100%'
+        }}
+          verticalAlign='middle'>
+          <Grid.Column style={{
+            maxWidth: 450
+          }}> 
+            <Header as='h2' color='teal' textAlign='center'>
+              An Email Has Been Sent. Follow The Link To Reset Your Password.
+            </Header>
+          </Grid.Column>
+        </Grid>
+      </div>
+    }
+    
+    return (
+        <div>
+          {render}
+        </div>
 
     )
   }

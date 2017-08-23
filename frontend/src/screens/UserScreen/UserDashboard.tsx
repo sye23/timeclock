@@ -33,6 +33,7 @@ const UserDashboard = () => (
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+            <Button floated='right' content='Log Out' icon='log out' labelPosition='right' color='red'/>
         </Container>
     </div>
 )

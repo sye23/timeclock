@@ -5,8 +5,10 @@ export interface AdminLoginState{
     },
     error:{
         email:boolean;
+        password:boolean;
     },
     errorMsg:{
         email:string;
+        password: string;
     }
 }

@@ -13,10 +13,12 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                 password:''
             }, 
             error:{
-                email:false
+                email:false,
+                password: false
             },
             errorMsg:{
-                email:''
+                email:'',
+                password: ''
             }
         }
     }
@@ -27,9 +29,6 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
         this.setState(state);
     }
 
-    blurHandler = () =>{
-        this.formValidation()
-    }
       
       
     formValidation = () =>{
@@ -46,21 +45,52 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
             state.errorMsg.email = '';
         }
 
+        if(!state.user.password){
+            formIsValid = false;
+            state.errorMsg.password = 'Password is required';
+            state.error.password = true;
+        } else{
+            formIsValid = true;
+            state.error.password = false;
+            state.errorMsg.password = '';
+        }
+
         this.setState(state);
         return formIsValid;
+    }
+
+    checkForErrors = (obj:{}) =>{
+        for (let i in obj) {
+            if (obj[i] === true) return false;
+        }
+        return true;
+    }
+
+    getAllErrorMsgs = (obj:{}) =>{
+        let result:any = [];
+        for (let key in obj) {
+          if( obj.hasOwnProperty(key) ) {
+            result.push(obj[key]);
+          } 
+        }              
+        return result;
     }
     
     
     submit = () => {
-    this.formValidation()
-    if(this.formValidation()){
-        alert("Form submitted");
-    }else{
-        alert("Form has errors.")
-    }
+        this.formValidation()
+        if(this.formValidation() && this.checkForErrors(this.state.error)){
+            alert("Form submitted");
+        }else{
+            alert("Form has errors.")
+        }
     }
 
     render(){
+
+        let state = Object.assign({}, this.state);
+        let errorMsgArray = this.getAllErrorMsgs(state.errorMsg).filter(Boolean);
+        errorMsgArray
         return (
             <div className='login-form'>
               <style>{`
@@ -78,13 +108,18 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
               >
                 <Grid.Column style={{ maxWidth: 450 }}>
                   
-                  <Form error={this.state.error.email} size='large'>
-                  <Message
-                    size='mini'
-                    error
-                    content={this.state.errorMsg.email}
-                   />
+                  <Form error={!this.checkForErrors(this.state.error)} size='large'>
+                    <Message
+                        floating
+                        size='mini'
+                        error
+                        content={errorMsgArray.map((msg:string)=><li className='errorMsgsLi'>{msg}</li>)}
+                    />
+                  
                     <Segment stacked>
+                    <Header as='h2' color='teal' textAlign='center'>
+                        {' '}Administator Login 
+                    </Header>
                       <Form.Input
                         error = {this.state.error.email}
                         fluid
@@ -92,9 +127,8 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                         iconPosition='left'
                         name='email'
                         value={this.state.user.email}
-                        placeholder='E-mail address'
+                        placeholder={(!this.state.error.email)?'E-mail address':this.state.errorMsg.email}
                         onChange={this.changeHandler}
-                        onBlur={this.blurHandler}
                       />
                       <Form.Input
                         fluid
@@ -102,10 +136,9 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                         iconPosition='left'
                         name='password'
                         value={this.state.user.password}
-                        placeholder='Password'
+                        placeholder={(!this.state.error.password)?'Password':this.state.errorMsg.password}
                         type='password'
                         onChange={this.changeHandler}
-                        onBlur={this.blurHandler}
                       />
           
                       <Button color='teal' fluid size='large' onClick={this.submit}>Login</Button>
@@ -115,6 +148,7 @@ export default class AdminLogin extends React.Component<any,AdminLoginState>{
                     Don't have account? <Link to='/signUp'>Sign Up</Link>
                     <br/><Link to='/forgotPassword'>Forgot Password?</Link>
                   </Message>
+                  <Link to='/'><Button color='orange' floated='right' size='small' >Go Back</Button></Link>
                 </Grid.Column>
               </Grid>
             </div>

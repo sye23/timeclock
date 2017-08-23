@@ -1,4 +1,7 @@
 export interface SignUpState{
+    success:{
+        isSubmitted: boolean;
+    },
     user:{
         firstName: string;
         lastName: string;
