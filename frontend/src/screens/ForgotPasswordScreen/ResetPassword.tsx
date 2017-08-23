@@ -2,60 +2,94 @@ import * as React from 'react';
 import {Button,Form,Grid,Header,Image,Message,Segment} from 'semantic-ui-react';
 import * as utils from '../../utils/utilFunctions';
 import { Link } from 'react-router-dom';
+import {ResetPasswordState} from '../../types/resetPasswordState';
 
-export default class ResetPassword extends React.Component < any, any > {
+export default class ResetPassword extends React.Component < any, ResetPasswordState > {
 
-  constructor() {
-    super();
-    this.state = {
-      user:{
-        email:''
-      },
-      errors:{
-        errorMsg: '',
-        error: false
-      }
+    constructor(){
+        super();
+        this.state = {
+            user:{
+                password:'',
+                confirmPasword:''
+            },
+            error:{
+                password:false,
+                confirmPasword:false
+            },
+            errorMsg:{
+                password:'',
+                confirmPasword:''
+            }
+        }
     }
-  }
 
-changeHandler = (e: any) => {
-  let state = Object.assign({}, this.state);
-  state.user[e.target.name] = e.target.value;
-  this.setState(state);
-}
+    changeHandler = (e: any) => {
+        let state = Object.assign({}, this.state);
+        state.user[e.target.name] = e.target.value;
+        this.setState(state);
+    }
 
-blurHandler = () =>{
-  this.formValidation()
-}
+    checkForErrors = (obj:{}) =>{
+        for (let i in obj) {
+            if (obj[i] === true) return false;
+        }
+        return true;
+    }
+    
+    getAllErrorMsgs = (obj:{}) =>{
+        let result:any = [];
+        for (let key in obj) {
+          if( obj.hasOwnProperty(key) ) {
+            result.push(obj[key]);
+          } 
+        }              
+        return result;
+    }
+      
+    formValidation = () =>{
+        let state =Object.assign({}, this.state);
+        let formIsValid = true;
+        let password = utils.isOkPass(state.user.password);
 
-formValidation = () =>{
-  let state =Object.assign({}, this.state);
-  let formIsValid = true;
+        
+        if(!state.user.password || !password.result){
+            formIsValid = false;
+            state.errorMsg.password = password.error;
+            state.error.password = true;
+        }else{
+            formIsValid = true;
+            state.error.password = false;
+            state.errorMsg.password = '';
+        }
+        if(!state.user.confirmPasword || (state.user.confirmPasword !== state.user.password)){
+            formIsValid = false;
+            state.errorMsg.confirmPasword = 'Passwords Do not Match';
+            state.error.confirmPasword = true;
+        }else{
+            formIsValid = true;
+            state.error.confirmPasword = false;
+            state.errorMsg.confirmPasword = '';
+        }
 
-  if(!state.user.email || !utils.checkEmail(state.user.email)){
-    formIsValid = false;
-    state.errors.errorMsg = 'Enter valid email';
-    state.errors.error = true;
-  } else{
-    formIsValid = true;
-    state.errors.error = false;
-    state.errors.errorMsg = '';
-  }
-  this.setState(state);
-  return formIsValid;
-}
-
-
-submit = () => {
-  this.formValidation()
-  if(this.formValidation()){
-    alert("Form submitted");
- }else{
-    alert("Form has errors.")
- }
-}
+        this.setState(state);
+        return formIsValid;
+    }
+    
+    
+    submit = () => {
+        this.formValidation()
+        if(this.formValidation() && this.checkForErrors(this.state.error)){
+            alert("Form submitted");
+        }else{
+            alert("Form has errors.")
+        }
+    }
 
   render() {
+    let state = Object.assign({}, this.state);
+    let errorMsgArray = this.getAllErrorMsgs(state.errorMsg).filter(Boolean);
+    errorMsgArray
     
     return (
       <div className='login-form'>
@@ -69,7 +103,7 @@ submit = () => {
              `
           }</style>
 
-          <h1 className='mainHeader'>Time Clock</h1>
+          <h1 className='mainHeader'>Time Clock<h2>Reset Password</h2></h1>
         <Grid
           textAlign='center'
           style={{
@@ -80,38 +114,52 @@ submit = () => {
             maxWidth: 450
           }}>
           
-            <Form error={this.state.errors.error} size='large'>
+            <Form size='large' error={!this.checkForErrors(this.state.error)}>
             <Message
-              size='mini'
-              error
-              content={this.state.errors.errorMsg}
+                floating
+                size='mini'
+                error
+                content={errorMsgArray.map((msg:string)=><li className='errorMsgsLi'>{msg}</li>)}
             />
               <Segment stacked>
                 <Header as='h2' color='teal' textAlign='center'>
-                  {' '}Login to your account
+                  {' '}Reset Password
                 </Header>
               
                 <Form.Input
-                  error = {this.state.errors.error}                  
-                  fluid
-                  icon='user'
-                  iconPosition='left'
-                  name='email'
-                  value={this.state.user.email}
-                  onChange={this.changeHandler}
-                  onBlur={this.blurHandler}
-                  placeholder='E-mail address'/>
+                    error = {this.state.error.password}
+                    fluid
+                    icon='lock'
+                    iconPosition='left'
+                    name='password'
+                    value={this.state.user.password}
+                    label='New Password'
+                    className='signUpLabel' 
+                    placeholder={(!this.state.error.password)?'Password':this.state.errorMsg.password}
+                    type='password'
+                    onChange={this.changeHandler}
+                />
+                <Form.Input
+                    error = {this.state.error.confirmPasword}
+                    fluid
+                    icon='lock'
+                    iconPosition='left'
+                    name='confirmPasword'
+                    value={this.state.user.confirmPasword}
+                    label='Confim Password'
+                    className='signUpLabel' 
+                    placeholder={(!this.state.error.confirmPasword)?'Confirm Password':this.state.errorMsg.confirmPasword}
+                    type='password'
+                    onChange={this.changeHandler}
+                />
                 <Button
                   color='teal' 
                   fluid size='large' 
                   onClick={this.submit}>
-                  Login
+                  Reset
                 </Button>
               </Segment>
             </Form>
-            <Message>
-              <Link to='/adminLogin'>Admin Login</Link>
-            </Message>
           </Grid.Column>
         </Grid>
       </div>

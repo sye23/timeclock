@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 let Clock = require('react-live-clock');
 import Stopwatch from 'react-stopwatch';
 import * as utils from '../../utils/utilFunctions';
+import {AdminFacilityState} from '../../types/adminFacilityState';
 
-export default class AdminFacility extends React.Component<any,any>{
+export default class AdminFacility extends React.Component<any,AdminFacilityState>{
     constructor(){
         super();
         this.state = {
@@ -13,16 +14,19 @@ export default class AdminFacility extends React.Component<any,any>{
             user:{
                 name:'',
                 email:'',
-                time: null
+                time: null,
+                dropdown: []
             },
             error:{
                 name: false,
                 email: false,
-                time: false
+                time: false,
+                addUser: false
             },
             errorMsg:{
                 name: '',
-                email: ''
+                email: '',
+                addUser: ''
             }
         }
     }
@@ -39,7 +43,7 @@ export default class AdminFacility extends React.Component<any,any>{
             formIsValid = true;
             state.error.time = false;
         }
-        this.setState({state});
+        this.setState(state);
         return formIsValid;
     }
 
@@ -47,17 +51,16 @@ export default class AdminFacility extends React.Component<any,any>{
         let state =Object.assign({}, this.state);
         let formIsValid = true;
     
-       
         if(!state.user.name){
             formIsValid = false;
-            state.errorMsg.name = 'First Name is Required';
+            state.errorMsg.name = 'Name is Required';
             state.error.name = true;
         } else{
             formIsValid = true;
             state.error.name = false;
             state.errorMsg.name = '';
         }
-        if((!state.user.email || !utils.checkEmail(state.user.email) && !formIsValid)){
+        if(!state.user.email || !utils.checkEmail(state.user.email)){
             formIsValid = false;
             state.errorMsg.email = 'Enter valid email';
             state.error.email = true;
@@ -66,7 +69,18 @@ export default class AdminFacility extends React.Component<any,any>{
             state.error.email = false;
             state.errorMsg.email = '';
         }
-        this.setState({state});
+        if(state.user.name && state.user.email && state.user.dropdown.length >=1){
+            formIsValid = false;
+            state.error.addUser = true;
+            state.errorMsg.addUser = 'Only use one of the two input options!!!';
+        } else{
+            formIsValid = true;
+            state.error.addUser = false;
+            state.errorMsg.addUser = '';
+        }
+
+
+        this.setState(state);
         return formIsValid;
     }
 
@@ -82,7 +96,7 @@ export default class AdminFacility extends React.Component<any,any>{
     }
 
     submitUser = () =>{
-        if(this.formValidation() && this.checkForErrors(this.state.error)){
+        if(this.formValidation() && this.checkForErrors(this.state.error)||((this.state.user.dropdown.length >=1) && !this.state.error.addUser) ){
             alert('submitted')
         }else{
             alert('Errors')
@@ -104,10 +118,18 @@ export default class AdminFacility extends React.Component<any,any>{
         this.setState(state);
     }
     
+    handleChange = (e:any, { value }:any) =>{
+        let state = Object.assign({}, this.state);
+        let newArray = value;
+        state.user.dropdown = newArray.slice(0);
+        this.setState(state);
+    } 
 
     render(){
         const activeItem  = this.state.activeItem;
-        const stateOptions = [ { key: 'AL', value: 'AL', text: 'Alabama' }];
+        const stateOptions = [ { key: '1', value: '1', text: 'Teri Eisenbach' },
+                                { key: '2', value: '2', text: 'Joe Smith' },
+                                { key: '3', value: '3', text: 'Bob Jones' }];
 
         return (
             <div>
@@ -145,19 +167,34 @@ export default class AdminFacility extends React.Component<any,any>{
                                             <Header icon='add user'  color='teal' content='Add A Contributor to this Project' />
                                             <Modal.Content>
                                                 <Header color='teal' as='h3' textAlign='center'>Select From Existing Users</Header>
-                                                <Dropdown placeholder='State' fluid multiple search selection options={stateOptions} />
+                                                <Dropdown 
+                                                    placeholder='Select one or more users' 
+                                                    fluid 
+                                                    multiple 
+                                                    search 
+                                                    scrolling
+                                                    selection 
+                                                    options={stateOptions} 
+                                                    onChange={this.handleChange}
+                                                />
                                                     <Divider horizontal>Or</Divider>
                                                 <Grid centered>    
-                                                <Form size='large'  >
+                                                <Form error={this.state.error.addUser} size='large'>
+                                                    <Message
+                                                        floating
+                                                        size='mini'
+                                                        error
+                                                        content={this.state.errorMsg.addUser}
+                                                    />
                                                     <Form.Group>
-                                                        <Form.Input 
+                                                        <Form.Input
                                                             placeholder= {(!this.state.error.name)?'Name': this.state.errorMsg.name}
                                                             name='name' 
                                                             value={this.state.user.name} 
                                                             onChange={this.changeHandler} 
                                                             error = {this.state.error.name} 
                                                         />
-                                                        <Form.Input 
+                                                        <Form.Input
                                                             placeholder= {(!this.state.error.email)?'Email': this.state.errorMsg.email}
                                                             name='email' value={this.state.user.email}  
                                                             onChange={this.changeHandler} 

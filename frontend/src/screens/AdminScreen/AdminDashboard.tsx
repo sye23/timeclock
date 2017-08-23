@@ -2,7 +2,7 @@ import * as React from 'react';
 let Clock = require('react-live-clock');
 import { Link } from 'react-router-dom';
 import { Container, Header, Card, Image, Button, Statistic, Divider, Grid, Menu, Modal, Form, Icon } from 'semantic-ui-react'
-
+import {AdminDashboardState} from '../../types/adminDashboardState';
 export default class AdminDashboard extends React.Component<any, any>{
 
     constructor(){

@@ -25,9 +25,6 @@ changeHandler = (e: any) => {
   this.setState(state);
 }
 
-blurHandler = () =>{
-  this.formValidation()
-}
 
 formValidation = () =>{
   let state =Object.assign({}, this.state);
@@ -96,7 +93,6 @@ submit = () => {
                   name='email'
                   value={this.state.user.email}
                   onChange={this.changeHandler}
-                  onBlur={this.blurHandler}
                   placeholder={(!this.state.errors.error)?'E-mail address': this.state.errors.errorMsg}/>
                 <Button
                   color='teal' 

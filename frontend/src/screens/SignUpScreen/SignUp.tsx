@@ -8,6 +8,9 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
     constructor(){
         super();
         this.state = {
+            success:{
+                isSubmitted:false
+            },
             user:{
                 firstName: '',
                 lastName: '',
@@ -124,11 +127,12 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
     
     
     submit = () => {
+        let state = Object.assign({}, this.state);
         this.formValidation()
         if(this.formValidation() && this.checkForErrors(this.state.error)){
-            alert("Form submitted");
+            state.success.isSubmitted = true;
         }else{
-            alert("Form has errors.")
+            state.success.isSubmitted = false;
         }
     }
 
@@ -136,116 +140,140 @@ export default class AdminLogin extends React.Component<any,SignUpState>{
         let state = Object.assign({}, this.state);
         let errorMsgArray = this.getAllErrorMsgs(state.errorMsg).filter(Boolean);
         errorMsgArray
-        return (
-            <div className='login-form'>
-              <style>{`
-                body > div,
-                body > div > div,
-                body > div > div > div.login-form {
-                  height: 100%;
-                }
-              `}
-              </style>
-              <h1 className='mainHeader'>Sign Up Form</h1>
-              <Grid
-                textAlign='center'
-                style={{ height: '100%' }}
-                verticalAlign='middle'
-              >
-                <Grid.Column style={{ maxWidth: 450 }}>
-                  
-                  <Form className='signUpForm' error={!this.checkForErrors(this.state.error)} size='large'>
-                    <Message
-                        floating
-                        size='mini'
-                        error
-                        content={errorMsgArray.map((msg:string)=><li className='errorMsgsLi'>{msg}</li>)}
+        let render;
+        if(!this.state.success.isSubmitted){
+            render= <div className='login-form'>
+            <style>{`
+              body > div,
+              body > div > div,
+              body > div > div > div.login-form {
+                height: 100%;
+              }
+            `}
+            </style>
+            <h1 className='mainHeader'>Sign Up Form</h1>
+            <Grid
+              textAlign='center'
+              style={{ height: '100%' }}
+              verticalAlign='middle'
+            >
+              <Grid.Column style={{ maxWidth: 450 }}>
+                
+                <Form className='signUpForm' error={!this.checkForErrors(this.state.error)} size='large'>
+                  <Message
+                      floating
+                      size='mini'
+                      error
+                      content={errorMsgArray.map((msg:string)=><li className='errorMsgsLi'>{msg}</li>)}
+                  />
+                  <Segment stacked>
+                    <Header as='h2' color='teal' textAlign='center'>
+                    {' '}Create An Account
+                    </Header>
+                  <Form.Group widths='equal'>    
+                  <Form.Input 
+                      error = {this.state.error.firstName}
+                      fluid
+                      icon='user'
+                      iconPosition='left'
+                      name='firstName' 
+                      value={this.state.user.firstName} 
+                      label='First Name'
+                      className='signUpLabel' 
+                      placeholder='First Name' 
+                      onChange={this.changeHandler}
+                  />
+                  <Form.Input 
+                      error = {this.state.error.lastName}
+                      fluid
+                      icon='user'
+                      iconPosition='left'
+                      name='lastName'
+                      value={this.state.user.lastName} 
+                      label='Last Name'
+                      className='signUpLabel'  
+                      placeholder='Last Name'
+                      onChange={this.changeHandler}
+                  />
+                  </Form.Group>
+                  <Form.Input
+                      error = {this.state.error.companyName}
+                      fluid
+                      icon='building'
+                      iconPosition='left'
+                      name='companyName'
+                      value={this.state.user.companyName}
+                      label='Company Name'
+                      className='signUpLabel' 
+                      placeholder='Company Name'
+                      onChange={this.changeHandler}
                     />
-                    <Segment stacked>
-
-                    <Form.Group widths='equal'>    
-                    <Form.Input 
-                        error = {this.state.error.firstName}
-                        fluid
-                        icon='user'
-                        iconPosition='left'
-                        name='firstName' 
-                        value={this.state.user.firstName} 
-                        label='First Name'
-                        className='signUpLabel' 
-                        placeholder='First Name' 
-                        onChange={this.changeHandler}
-                    />
-                    <Form.Input 
-                        error = {this.state.error.lastName}
-                        fluid
-                        icon='user'
-                        iconPosition='left'
-                        name='lastName'
-                        value={this.state.user.lastName} 
-                        label='Last Name'
-                        className='signUpLabel'  
-                        placeholder='Last Name'
-                        onChange={this.changeHandler}
-                    />
-                    </Form.Group>
                     <Form.Input
-                        error = {this.state.error.companyName}
-                        fluid
-                        icon='building'
-                        iconPosition='left'
-                        name='companyName'
-                        value={this.state.user.companyName}
-                        label='Company Name'
-                        className='signUpLabel' 
-                        placeholder='Company Name'
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Input
-                        error = {this.state.error.email}
-                        fluid
-                        icon='at'
-                        iconPosition='left'
-                        name='email'
-                        value={this.state.user.email}
-                        label='Email'
-                        className='signUpLabel' 
-                        placeholder='E-mail address'
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Input
-                        error = {this.state.error.password}
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        name='password'
-                        value={this.state.user.password}
-                        label='Password'
-                        className='signUpLabel' 
-                        placeholder='Password'
-                        type='password'
-                        onChange={this.changeHandler}
-                      />
-                      <Form.Input
-                        error = {this.state.error.confirmPasword}
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        name='confirmPasword'
-                        value={this.state.user.confirmPasword}
-                        label='Confim Password'
-                        className='signUpLabel' 
-                        placeholder='Confirm Password'
-                        type='password'
-                        onChange={this.changeHandler}
-                      />
-          
-                      <Button color='teal' fluid size='large' onClick={this.submit}>Submit</Button>
-                    </Segment>
-                  </Form>
-                  <Link to='/adminLogin'><Button color='orange' floated='right' size='small' >Go Back</Button></Link>
-                </Grid.Column>
-              </Grid>
+                      error = {this.state.error.email}
+                      fluid
+                      icon='at'
+                      iconPosition='left'
+                      name='email'
+                      value={this.state.user.email}
+                      label='Email'
+                      className='signUpLabel' 
+                      placeholder='E-mail address'
+                      onChange={this.changeHandler}
+                    />
+                    <Form.Input
+                      error = {this.state.error.password}
+                      fluid
+                      icon='lock'
+                      iconPosition='left'
+                      name='password'
+                      value={this.state.user.password}
+                      label='Password'
+                      className='signUpLabel' 
+                      placeholder='Password'
+                      type='password'
+                      onChange={this.changeHandler}
+                    />
+                    <Form.Input
+                      error = {this.state.error.confirmPasword}
+                      fluid
+                      icon='lock'
+                      iconPosition='left'
+                      name='confirmPasword'
+                      value={this.state.user.confirmPasword}
+                      label='Confim Password'
+                      className='signUpLabel' 
+                      placeholder='Confirm Password'
+                      type='password'
+                      onChange={this.changeHandler}
+                    />
+        
+                    <Button color='teal' fluid size='large' onClick={this.submit}>Submit</Button>
+                  </Segment>
+                </Form>
+                <Link to='/adminLogin'><Button color='orange' floated='right' size='small' >Go Back</Button></Link>
+              </Grid.Column>
+            </Grid>
+          </div>
+        }else{
+            render = 
+                <div>
+                    <Grid
+                        textAlign='center'
+                        style={{ height: '100%' }}
+                        verticalAlign='middle'
+                    >
+                    <Grid.Column style={{ maxWidth: 450 }}>
+                        <Header as='h2' color='grey' textAlign='center'>
+                            You Have Successfully Signed Up.<br/> You Need To Confirm Your Email To Continue.<br/>
+                            You Will Receive An Email Shortly.<br/><small>(Make sure to check your spam folder.)</small> 
+                        </Header>
+                    </Grid.Column>
+                </Grid>
+            </div>
+        } 
+        return (
+            <div>
+            {render}
             </div>
           )
     }
